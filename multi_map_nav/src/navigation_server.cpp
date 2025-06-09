@@ -21,8 +21,9 @@ public:
     nh_(nh),
     as_(nh_, "navigation_action", boost::bind(&NavigationActionServer::executeCB, this, _1), false)
   {
-
-    std::string db_path = "/home/anmol/wormhole_ws/src/multi_map_nav/sql/wormholes.db" ;
+    pkg_path = ros::package::getPath("multi_map_nav");
+    std::string db_path = pkg_path + "/sql/" + "wormholes.db" ;
+    // ROS_INFO("path:%s",)
     if (sqlite3_open(db_path.c_str(), &db_) != SQLITE_OK) {
       ROS_ERROR("Failed to open wormholes.db at '%s': %s", db_path.c_str(), sqlite3_errmsg(db_));
       sqlite3_close(db_);
@@ -38,7 +39,8 @@ public:
 
     current_map_ = "room_1";
     nav_msgs::LoadMap init_srv;
-    std::string s= "/home/anmol/wormhole_ws/src/multi_map_nav/maps/room_1.yaml";
+    pkg_path = ros::package::getPath("multi_map_nav");
+    std::string s = pkg_path + "/maps/room_1.yaml";
     init_srv.request.map_url = s;
     if (!load_map_client_.call(init_srv) || init_srv.response.result) {
       ROS_WARN("Could not load initial map 'room_1'—make sure map_server is running with '/load_map'.");
@@ -63,7 +65,7 @@ private:
   ros::ServiceClient load_map_client_;
   sqlite3* db_;
   std::string current_map_;
-
+  std::string pkg_path;
   void executeCB(const multi_map_nav::NavigationGoalConstPtr& goal)
   {
     multi_map_nav::NavigationFeedback feedback;
@@ -124,7 +126,7 @@ private:
       as_.publishFeedback(feedback);
     
       nav_msgs::LoadMap srv;
-    srv.request.map_url ="/home/anmol/wormhole_ws/src/multi_map_nav/maps/" + target_map +  ".yaml";
+      srv.request.map_url =pkg_path+"/maps/" + target_map +  ".yaml";
       if (!load_map_client_.call(srv) || srv.response.result) {
         feedback.state = "Failed to load map '" + target_map + ".";
         result.success= false;

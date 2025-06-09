@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
   nav_msgs
   rospack
+  roslib
 )
 
 
@@ -40,15 +41,21 @@ catkin_package(
     std_srvs
     nav_msgs
     rospack
+    roslib
 )
 
 link_directories(/usr/lib)
+
+install(DIRECTORY sql/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/sql
+)
 
 add_executable(navigation_server src/navigation_server.cpp)
 target_link_libraries(navigation_server
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
   sqlite3
+  
 )
 add_dependencies(navigation_server ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
