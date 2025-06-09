@@ -58,6 +58,12 @@ rostopic pub /navigation_action/goal multi_map_nav/NavigationActionGoal "{ \
 
 ## 5. Path generated
 
+- Video link:
+
+```python
+https://drive.google.com/file/d/1C4GJ_VkWvZScwBU93dp1er3f8OYBbhwK/view?usp=drive_link
+```
+
 ![wormhole_image.png](attachment:bd159cc2-0a97-4e4c-9365-0795ec84a919:wormhole_image.png)
 
 ## 6. Approach
